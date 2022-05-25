@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Action_Plan_has_been_closed</fullName>
+        <description>Action Plan has been closed</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>aolson@eab.com.eab</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>astepien@eab.com.eab</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>chunter@eab.com.eab</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>dclark@eab.com.eab</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>japril@collegegreenlight.com.eab</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>jcampbell@eab.com.eab</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>tsingh@eab.com.eab</recipient>
+            <type>user</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Closed_Action_Plan</template>
+    </alerts>
+    <alerts>
+        <fullName>Alert_When_New_Action_Plan_Created</fullName>
+        <description>Alert When New Action Plan Created</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>aolson@eab.com.eab</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>astepien@eab.com.eab</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>chunter@eab.com.eab</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>dclark@eab.com.eab</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>japril@collegegreenlight.com.eab</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>jcampbell@eab.com.eab</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>tsingh@eab.com.eab</recipient>
+            <type>user</type>
+        </recipients>
+        <senderType>DefaultWorkflowUser</senderType>
+        <template>Cappex_Email_Templates/New_Action_Plan_Created</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>FU_AssignTestimonialField</fullName>
+        <field>OwnerId</field>
+        <lookupValue>sschirmeier@eab.com.eab</lookupValue>
+        <lookupValueType>User</lookupValueType>
+        <name>FU_AssignTestimonialField</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>LookupValue</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Task_Populate_Subject</fullName>
+        <field>Subject</field>
+        <formula>TEXT( CreatedDate )  &amp; &quot; - &quot; &amp; TEXT(Event_Type__c) &amp; &quot; - &quot; &amp;  CreatedBy.FirstName &amp; &quot; &quot; &amp; CreatedBy.LastName</formula>
+        <name>Task: Populate Subject</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Alert When Action Plan Created</fullName>
+        <actions>
+            <name>Alert_When_New_Action_Plan_Created</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Task.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Action Plans</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Task.Status</field>
+            <operation>notEqual</operation>
+            <value>Completed</value>
+        </criteriaItems>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Closed Action Plan</fullName>
+        <actions>
+            <name>Action_Plan_has_been_closed</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <formula>AND( 	NOT( ISBLANK( RecordTypeId ) ), 	RecordType.DeveloperName = &apos;Action_Plans&apos;, 	ISPICKVAL(Status, &apos;Completed&apos;) )</formula>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Task%3A Populate Subject</fullName>
+        <actions>
+            <name>Task_Populate_Subject</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Task.Subject</field>
+            <operation>equals</operation>
+            <value>Will Auto-Populate</value>
+        </criteriaItems>
+        <description>replace the &apos;Will Auto Populate&apos; value in the subject with the &quot;ActivityDate - ActivityType - WhatName - WhoName&quot;</description>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>WF_AssignTestimonial</fullName>
+        <actions>
+            <name>FU_AssignTestimonialField</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Task.Subject</field>
+            <operation>equals</operation>
+            <value>Member Impact Story</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Task.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Testimonials</value>
+        </criteriaItems>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+</Workflow>
