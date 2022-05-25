@@ -13,6 +13,10 @@
         <name>ApexTrigger</name>
     </types>
     <types>
+        <members>Create_Campaign_Member_Status</members>
+        <name>Flow</name>
+    </types>
+    <types>
         <members>*</members>
         <name>Workflow</name>
     </types>
