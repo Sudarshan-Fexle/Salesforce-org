@@ -7,6 +7,7 @@ trigger Account_Trigger on Account (before insert, before update, after insert, 
     
     if(Trigger.isAfter && (Trigger.isInsert || Trigger.isUpdate))
         //     AccountTriggerHandler.createContactUnderAccount(Trigger.newMap, Trigger.oldMap);
+        // initial commit
             AccountTriggerHandler.createContactUnderAccount(Trigger.new, Trigger.oldMap);
             
 }
